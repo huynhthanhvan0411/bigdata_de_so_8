@@ -1,0 +1,59 @@
+import pyspark
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import countDistinct
+from pyspark.sql.functions import count, sum
+from pyspark.sql.functions import col
+from pyspark.sql.functions import when
+from pyspark.sql.functions import col, min, max, avg
+from pyspark.sql.window import Window
+from pyspark.sql import functions as F
+from pyspark.sql.types import IntegerType
+from pyspark.sql.types import StructType, StructField, StringType
+import logging
+
+
+spark = SparkSession.builder.appName("FindMaxProduct").getOrCreate()
+# ===================3.1=============
+data = spark.read.format('csv')\
+            .option('header', 'true')\
+            .option('escape', '\"')\
+            .load('D:/WORK_UTT_F/nam_4/ki_1/part_1/big_data_demo/nhom6/E1.csv')
+# ===================3.2=============
+data = data.withColumn("FTHG", data["FTHG"].cast(IntegerType()))
+data = data.withColumn("FTAG", data["FTAG"].cast(IntegerType()))
+data = data.withColumn("HS", data["HS"].cast(IntegerType()))
+data = data.withColumn("AS", data["AS"].cast(IntegerType()))
+
+
+# ===================3.3=============
+print("============list=================")
+print("Câu 3.3: Có bao nhiêu đội trong mùa giải, liệt kê")
+print("============list=================")
+print("Câu 3.3: Có bao nhiêu đội trong mùa giải, liệt kê")
+cau_3 = data.select("HomeTeam").distinct()
+print("Có " + str(cau_3.count()) + " đội")
+print("Danh sách các đội:")
+cau_3.show(30)
+
+# # ===================3.4=============
+print("Câu 3.4: Số trận có kết quả hòa")
+cau4 = data.where(data["FTR"] == "D").count()
+print("Số trận có kết quả hòa: " + str(cau4))
+print("==========================================================")
+
+# # ===================3.5=============
+print("Câu 3.5: Tìm tổng số bàn thắng các đội ghi được trên sân nhà")
+cau5 = data.groupBy("HomeTeam").agg({"FTHG": "sum"}).withColumnRenamed("sum(FTHG)", "Total")
+cau5.show(100)
+total_goals = cau5.selectExpr("sum(Total) as Total").first().Total
+print("Tổng số bàn thắng các đội đá sân nhà ghi được: " + str(total_goals))
+print("==========================================================")
+
+# ===================3.6=============
+print("Câu 3.6: Số trận có tổng số bàn thắng > 3")
+cau6 = data.withColumn("TotalGoals", col("FTHG") + col("FTAG")).filter(col("TotalGoals") > 3).count()
+print("Số trận có tổng số bàn thắng > 3: " + str(cau6))
+
+print("Câu 3.6: Những trận có tổng số bàn thắng > 3")
+cau3 = data.withColumn("TotalGoals", col("FTHG") + col("FTAG")).filter(col("TotalGoals") > 3)
+cau3.select("HomeTeam", "AwayTeam", "TotalGoals").show()
