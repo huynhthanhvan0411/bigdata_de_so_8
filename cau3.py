@@ -7,6 +7,7 @@
 # (FTHG = Fulltime hometeam goal – FTAG: Fulltime AwayGoal)
 # 3.6. Tìm những trận có tổng số bàn thắng > 3
 # 3.7. Tìm những trận của Burnley được thi đấu trên sân nhà và có số bàn thắng >=3 (Tính cả của đội khách)
+
 # 3.8. Tìm những trận mà Reading thua (Không được sử dụng cột FTR)
 # 3.9. Xoay giá trị trong cột FTR thành các cột, với mỗi cột chứa số lượng FTR tương ứng. nhóm theo HomeTeam
 # 3.10. Tạo một cột mới với tên cột tuỳ chọn: Nếu tổng số bàn thắng 2 đội ghi được trong trận  <2 thì điền “well” , nếu số bàn thắng  2 < x < 4 thì điền “very good”, nếu số bàn thắng >= 4 thì điền “amazing”. 
