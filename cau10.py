@@ -27,26 +27,21 @@ data = data.withColumn("AS", data["AS"].cast(IntegerType()))
 
 # 3.10. Tạo một cột mới với tên cột tuỳ chọn: Nếu tổng số bàn thắng 2 đội ghi được trong trận  <2 thì điền “well” , nếu số bàn thắng  2 < x < 4 thì điền “very good”, nếu số bàn thắng >= 4 thì điền “amazing”. 
 
-print("Câu 3.10: Tạo cột Status dựa trên tổng số bàn thắng")
-cau10 = data.withColumn("TotalGoals", data["FTHG"] + data["FTAG"]).withColumn(
-    "Status",
-    when(data["TotalGoals"] < 2, "well")
-    .when((data["TotalGoals"] >= 2) & (data["TotalGoals"] < 4), "very good")
-    .otherwise("amazing")
-)
-cau10.select("DIV", "DATE", "HomeTeam", "AwayTeam", "FTHG", "FTAG", "FTR", "TotalGoals", "Status").show(100)
-print("==========================================================")
-# Tạo cột "TotalGoals" bằng cách thêm số bàn thắng của đội nhà (FTHG) và đội khách (FTAG)
-data = data.withColumn("TotalGoals", data["FTHG"] + data["FTAG"])
+# Tính tổng số bàn thắng trong trận đấu và thêm cột "Status" dựa trên tổng số bàn thắng
 
-# # Tính toán cột "Status" dựa trên "TotalGoals"
-data = data.withColumn(
+# Tính tổng số bàn thắng trong trận đấu và thêm cột "Status" dựa trên tổng số bàn thắng
+cau10 = data.withColumn(
+    "GoalsTotal",
+    data["FTHG"] + data["FTAG"]
+)
+
+# Tính toán cột "Status" dựa trên "GoalsTotal"
+cau10 = cau10.withColumn(
     "Status",
-    when(data["TotalGoals"] < 2, "well")
-    .when((data["TotalGoals"] >= 2) & (data["TotalGoals"] < 4), "very good")
+    when(cau10["GoalsTotal"] < 2, "well")
+    .when((cau10["GoalsTotal"] >= 2) & (cau10["GoalsTotal"] < 4), "very good")
     .otherwise("amazing")
 )
 
-# # Hiển thị kết quả
-data.select("DIV", "DATE", "HomeTeam", "AwayTeam", "FTHG", "FTAG", "FTR", "TotalGoals", "Status").show(100)
-
+# Hiển thị kết quả
+cau10.select("Div", "Date", "HomeTeam", "AwayTeam", "FTHG", "FTAG", "FTR", "GoalsTotal", "Status").show(100)
