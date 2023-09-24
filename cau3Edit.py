@@ -1,4 +1,3 @@
-
 import pyspark
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import countDistinct
@@ -25,8 +24,15 @@ data = data.withColumn("FTAG", data["FTAG"].cast(IntegerType()))
 data = data.withColumn("HS", data["HS"].cast(IntegerType()))
 data = data.withColumn("AS", data["AS"].cast(IntegerType()))
 
-# 3.4. Tìm số trận có kết quả hoà
-# (FTR= Full time result: H = homewin, D = Draw, A= Awaywin)
+# ===================3.3=============
+print("============================3.3=====================================")
+# cau_3 = data.select("HomeTeam").distinct()
+# ta lựa chọn data để select theo cột hometeam avf loại bỏ trùng dùng distinct() nhưng vì muốn đổi tên thay vi để 
+# homêtam khi in ra ta dùng withcolumnremane đổi hometeam thành list team rồi select và distict là listteam
+cau_3 = data.withColumnRenamed("HomeTeam", "List_Team").select("List_Team").distinct()
+print("Câu 3.3: Có " + str(cau_3.count()) +" đội trong mùa giải")
+print("Danh sách các đội:")
+cau_3.show(n=cau_3.count(), truncate=False)
 
 # # ===================3.4=============
 # ta lựa chọn theo cột FTR vì cột FTR là cột full time và kết quả hòa là D=Draw 
@@ -38,4 +44,3 @@ print("Số trận có kết quả hòa: " + str(cau4_count))
 print("==========================================================")
 print("Câu 3.4: Các trận đấu có kết quả hòa và các đội tham gia:")
 cau4.select("HomeTeam", "AwayTeam").show(n=cau4.count(), truncate=False)
-

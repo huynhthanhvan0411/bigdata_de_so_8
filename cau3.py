@@ -40,80 +40,80 @@ data = data.withColumn("AS", data["AS"].cast(IntegerType()))
 
 
 # ===================3.3=============
-# print("============list=================")
-# print("Câu 3.3: Có bao nhiêu đội trong mùa giải, liệt kê")
-# print("============list=================")
-# print("Câu 3.3: Có bao nhiêu đội trong mùa giải, liệt kê")
-# cau_3 = data.select("HomeTeam").distinct()
-# print("Có " + str(cau_3.count()) + " đội")
-# print("Danh sách các đội:")
-# cau_3.show(30)
+print("============list=================")
+print("Câu 3.3: Có bao nhiêu đội trong mùa giải, liệt kê")
+print("============list=================")
+print("Câu 3.3: Có bao nhiêu đội trong mùa giải, liệt kê")
+cau_3 = data.select("HomeTeam").distinct()
+print("Có " + str(cau_3.count()) + " đội")
+print("Danh sách các đội:")
+cau_3.show(30)
 
-# # # ===================3.4=============
-# print("Câu 3.4: Số trận có kết quả hòa")
-# cau4 = data.where(data["FTR"] == "D").count()
-# print("Số trận có kết quả hòa: " + str(cau4))
-# print("==========================================================")
+# # ===================3.4=============
+print("Câu 3.4: Số trận có kết quả hòa")
+cau4 = data.where(data["FTR"] == "D").count()
+print("Số trận có kết quả hòa: " + str(cau4))
+print("==========================================================")
 
-# # # ===================3.5=============
-# print("Câu 3.5: Tìm tổng số bàn thắng các đội ghi được trên sân nhà")
-# cau5 = data.groupBy("HomeTeam").agg({"FTHG": "sum"}).withColumnRenamed("sum(FTHG)", "Total")
-# cau5.show(100)
-# total_goals = cau5.selectExpr("sum(Total) as Total").first().Total
-# print("Tổng số bàn thắng các đội đá sân nhà ghi được: " + str(total_goals))
-# print("==========================================================")
+# # ===================3.5=============
+print("Câu 3.5: Tìm tổng số bàn thắng các đội ghi được trên sân nhà")
+cau5 = data.groupBy("HomeTeam").agg({"FTHG": "sum"}).withColumnRenamed("sum(FTHG)", "Total")
+cau5.show(100)
+total_goals = cau5.selectExpr("sum(Total) as Total").first().Total
+print("Tổng số bàn thắng các đội đá sân nhà ghi được: " + str(total_goals))
+print("==========================================================")
 
-# # ===================3.6=============
-# print("Câu 3.6: Số trận có tổng số bàn thắng > 3")
-# cau6 = data.withColumn("TotalGoals", col("FTHG") + col("FTAG")).filter(col("TotalGoals") > 3).count()
-# print("Số trận có tổng số bàn thắng > 3: " + str(cau6))
+# ===================3.6=============
+print("Câu 3.6: Số trận có tổng số bàn thắng > 3")
+cau6 = data.withColumn("TotalGoals", col("FTHG") + col("FTAG")).filter(col("TotalGoals") > 3).count()
+print("Số trận có tổng số bàn thắng > 3: " + str(cau6))
 
-# print("Câu 3.6: Những trận có tổng số bàn thắng > 3")
-# cau3 = data.withColumn("TotalGoals", col("FTHG") + col("FTAG")).filter(col("TotalGoals") > 3)
-# cau3.select("HomeTeam", "AwayTeam", "TotalGoals").show()
+print("Câu 3.6: Những trận có tổng số bàn thắng > 3")
+cau3 = data.withColumn("TotalGoals", col("FTHG") + col("FTAG")).filter(col("TotalGoals") > 3)
+cau3.select("HomeTeam", "AwayTeam", "TotalGoals").show()
 
-# # ===================3.7=============
-# print("Câu 3.7: Những trận của Burnley thi đấu trên sân nhà và có số bàn thắng >= 3 (cả đội khách)")
-# cau7 = data.filter((data["HomeTeam"] == "Burnley") & (data["TotalGoals"] >= 3)).count()
-# print("Những trận của Burnley thi đấu trên sân nhà và có số bàn thắng >=3 (cả đội khách): " + str(cau7))
-# print("==========================================================")
+# ===================3.7=============
+print("Câu 3.7: Những trận của Burnley thi đấu trên sân nhà và có số bàn thắng >= 3 (cả đội khách)")
+cau7 = data.filter((data["HomeTeam"] == "Burnley") & (data["TotalGoals"] >= 3)).count()
+print("Những trận của Burnley thi đấu trên sân nhà và có số bàn thắng >=3 (cả đội khách): " + str(cau7))
+print("==========================================================")
 
-# # # Thêm cột "TotalGoals" để tính tổng số bàn thắng (cả đội nhà và đội khách)
-# data_with_total_goals = data.withColumn("TotalGoals", col("FTHG") + col("FTAG"))
+# # Thêm cột "TotalGoals" để tính tổng số bàn thắng (cả đội nhà và đội khách)
+data_with_total_goals = data.withColumn("TotalGoals", col("FTHG") + col("FTAG"))
 
-# # # Lọc ra các trận của Burnley được thi đấu trên sân nhà và có tổng số bàn thắng >= 3
-# burnley_home_matches = data_with_total_goals.filter((col("HomeTeam") == "Burnley") & (col("TotalGoals") >= 3))
+# # Lọc ra các trận của Burnley được thi đấu trên sân nhà và có tổng số bàn thắng >= 3
+burnley_home_matches = data_with_total_goals.filter((col("HomeTeam") == "Burnley") & (col("TotalGoals") >= 3))
 
-# # # Hiển thị thông tin về các trận đó
-# burnley_home_matches.select("Div", "Date", "HomeTeam", "AwayTeam", "FTHG", "FTAG", "FTR", "TotalGoals").show()
+# # Hiển thị thông tin về các trận đó
+burnley_home_matches.select("Div", "Date", "HomeTeam", "AwayTeam", "FTHG", "FTAG", "FTR", "TotalGoals").show()
 
-# # # ===================3.8=============
-# homeTeam = data.filter((col("HomeTeam") == "Reading") & (col("FTHG") < col("FTAG")))\
-#                 .select("Div", "Date", "HomeTeam", "AwayTeam", "FTHG", "FTAG", "HTHG", "HTAG", "HTR")
-# awayTeam = data.filter((col("AwayTeam") == "Reading") & (col("FTAG") > col("FTHG")))\
-#                 .select("Div", "Date", "HomeTeam", "AwayTeam", "FTHG", "FTAG","HTHG", "HTAG", "HTR")
+# # ===================3.8=============
+homeTeam = data.filter((col("HomeTeam") == "Reading") & (col("FTHG") < col("FTAG")))\
+                .select("Div", "Date", "HomeTeam", "AwayTeam", "FTHG", "FTAG", "HTHG", "HTAG", "HTR")
+awayTeam = data.filter((col("AwayTeam") == "Reading") & (col("FTAG") > col("FTHG")))\
+                .select("Div", "Date", "HomeTeam", "AwayTeam", "FTHG", "FTAG","HTHG", "HTAG", "HTR")
 
-# data = homeTeam.union(awayTeam)
+data = homeTeam.union(awayTeam)
 
-# # # Hiển thị danh sách các trận mà Reading thua với các cột đã chọn
-# data.show()
+# # Hiển thị danh sách các trận mà Reading thua với các cột đã chọn
+data.show()
 
-# # ===================3.9=============
-# print("Câu 3.9: Thống kê số lần thắng, hòa, thua của mỗi đội sân nhà")
-# cau9 = data.groupBy("HomeTeam", "FTR").count().groupBy("HomeTeam").pivot("FTR").agg({"count": "sum"}).na.fill(0)
-# cau9.show(100)
-# print("==========================================================")
+# ===================3.9=============
+print("Câu 3.9: Thống kê số lần thắng, hòa, thua của mỗi đội sân nhà")
+cau9 = data.groupBy("HomeTeam", "FTR").count().groupBy("HomeTeam").pivot("FTR").agg({"count": "sum"}).na.fill(0)
+cau9.show(100)
+print("==========================================================")
 
-# # ============================
+# ============================
 
-# # Câu 3.9: Xoay giá trị trong cột FTR thành các cột, với mỗi cột chứa số lượng FTR tương ứng. Nhóm theo HomeTeam.
-# cau9_data = data.groupBy("HomeTeam", "FTR").agg(count("FTR").alias("Count"))
-# pivot_df = cau9_data.groupBy("HomeTeam").pivot("FTR").agg(sum("Count")).na.fill(0)
+# Câu 3.9: Xoay giá trị trong cột FTR thành các cột, với mỗi cột chứa số lượng FTR tương ứng. Nhóm theo HomeTeam.
+cau9_data = data.groupBy("HomeTeam", "FTR").agg(count("FTR").alias("Count"))
+pivot_df = cau9_data.groupBy("HomeTeam").pivot("FTR").agg(sum("Count")).na.fill(0)
 
-# pivot_df.show(100)
-# # ===================3.10=============
+pivot_df.show(100)
+# ===================3.10=============
 
-# from pyspark.sql.functions import when
+from pyspark.sql.functions import when
 
 print("Câu 3.10: Tạo cột Status dựa trên tổng số bàn thắng")
 cau10 = data.withColumn("TotalGoals", data["FTHG"] + data["FTAG"]).withColumn(
