@@ -32,7 +32,7 @@ homeTeam = data.filter((col("HomeTeam") == "Reading") & (col("FTHG") < col("FTAG
 awayTeam = data.filter((col("AwayTeam") == "Reading") & (col("FTAG") > col("FTHG")))\
                 .select("Div", "Date", "HomeTeam", "AwayTeam", "FTHG", "FTAG","HTHG", "HTAG", "HTR")
 
-data = homeTeam.union(awayTeam)
+cau8 = homeTeam.union(awayTeam)
 
 # # Hiển thị danh sách các trận mà Reading thua với các cột đã chọn
-data.show()
+cau8.show(n=cau8.count(), truncate=False)

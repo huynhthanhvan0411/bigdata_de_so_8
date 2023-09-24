@@ -26,10 +26,10 @@ data = data.withColumn("HS", data["HS"].cast(IntegerType()))
 data = data.withColumn("AS", data["AS"].cast(IntegerType()))
 
 # 3.6. Tìm những trận có tổng số bàn thắng > 3
-print("Câu 3.6: Số trận có tổng số bàn thắng > 3")
-cau6 = data.withColumn("TotalGoals", col("FTHG") + col("FTAG")).filter(col("TotalGoals") > 3).count()
-print("Số trận có tổng số bàn thắng > 3: " + str(cau6))
-
+print("Câu 3.6:")
+cau6 = data.withColumn("TotalGoals", col("FTHG") + col("FTAG")).filter(col("TotalGoals") > 3)
+# tính tổng 
+print("Số trận có tổng số bàn thắng > 3: " + str(cau6.count()))
+# in hàng
 print("Câu 3.6: Những trận có tổng số bàn thắng > 3")
-cau3 = data.withColumn("TotalGoals", col("FTHG") + col("FTAG")).filter(col("TotalGoals") > 3)
-cau3.select("HomeTeam", "AwayTeam", "TotalGoals").show()
+cau6.select("HomeTeam", "AwayTeam", "TotalGoals").show(n=cau6.count(), truncate=False)

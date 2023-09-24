@@ -26,5 +26,7 @@ data = data.withColumn("HS", data["HS"].cast(IntegerType()))
 data = data.withColumn("AS", data["AS"].cast(IntegerType()))
 
 # 3.9. Xoay giá trị trong cột FTR thành các cột, với mỗi cột chứa số lượng FTR tương ứng. nhóm theo HomeTeam
-
-# 3.10. Tạo một cột mới với tên cột tuỳ chọn: Nếu tổng số bàn thắng 2 đội ghi được trong trận  <2 thì điền “well” , nếu số bàn thắng  2 < x < 4 thì điền “very good”, nếu số bàn thắng >= 4 thì điền “amazing”. 
+cau9_data = data.groupBy("HomeTeam", "FTR").agg(count("FTR").alias("Count"))
+cau9 = cau9_data.groupBy("HomeTeam").pivot("FTR").agg(sum("Count")).na.fill(0)
+# print("so cot"+str(cau9.count()))
+cau9.show(n=cau9.count(), truncate=False)

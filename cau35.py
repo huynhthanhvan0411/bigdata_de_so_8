@@ -30,7 +30,11 @@ data = data.withColumn("AS", data["AS"].cast(IntegerType()))
 
 print("Câu 3.5: Tìm tổng số bàn thắng các đội ghi được trên sân nhà")
 cau5 = data.groupBy("HomeTeam").agg({"FTHG": "sum"}).withColumnRenamed("sum(FTHG)", "Total")
-cau5.show(100)
+cau5.show(n=cau5.count(), truncate=False)
+
+# tính toorng full số bàn thắng ở cột total 
 total_goals = cau5.selectExpr("sum(Total) as Total").first().Total
 print("Tổng số bàn thắng các đội đá sân nhà ghi được: " + str(total_goals))
 print("==========================================================")
+
+   

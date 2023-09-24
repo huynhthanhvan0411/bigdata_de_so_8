@@ -11,7 +11,7 @@ from pyspark.sql import functions as F
 from pyspark.sql.types import IntegerType
 from pyspark.sql.types import StructType, StructField, StringType
 import logging
-
+from pyspark.sql.functions import col
 
 spark = SparkSession.builder.appName("FindMaxProduct").getOrCreate()
 # ===================3.1=============
@@ -27,15 +27,13 @@ data = data.withColumn("AS", data["AS"].cast(IntegerType()))
 
 # 3.7. Tìm những trận của Burnley được thi đấu trên sân nhà và có số bàn thắng >=3 (Tính cả của đội khách)
 
-from pyspark.sql.functions import col
-
 # Thêm cột "TotalGoals" để tính tổng số bàn thắng (cả đội nhà và đội khách)
-data_with_total_goals = data.withColumn("TotalGoals", col("FTHG") + col("FTAG"))
+sum_goals = data.withColumn("TotalGoals", col("FTHG") + col("FTAG"))
 
 # Lọc ra các trận của Burnley được thi đấu trên sân nhà và có tổng số bàn thắng >= 3
-burnley_home_matches = data_with_total_goals.filter((col("HomeTeam") == "Burnley") & (col("TotalGoals") >= 3))
+cau7 = sum_goals.filter((col("HomeTeam") == "Burnley") & (col("TotalGoals") >= 3))
 
 # Hiển thị thông tin về các trận đó
-print("Câu 3.7: Những trận của Burnley thi đấu trên sân nhà và có số bàn thắng >= 3 (cả đội khách):")
-burnley_home_matches.select("Div", "Date", "HomeTeam", "AwayTeam", "FTHG", "FTAG", "FTR", "TotalGoals").show()
+print("Câu 3.7: Những trận của Burnley thi đấu trên sân nhà và có số bàn thắng >= 3 (cả đội khách):" + str(cau7.count()))
+cau7.select("Div", "Date", "HomeTeam", "AwayTeam", "FTHG", "FTAG", "FTR", "TotalGoals").show(n=cau7.count(), truncate=False)
 
