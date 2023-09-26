@@ -20,6 +20,35 @@ data = spark.read.format('csv')\
             .option('escape', '\"')\
             .load('D:/WORK_UTT_F/nam_4/ki_1/part_1/big_data_demo/nhom6/E1.csv')
 
+schema = StructType([
+    StructField("Div", StringType(), True),
+    StructField("Date", StringType(), True),
+    StructField("Time", StringType(), True),
+    StructField("HomeTeam", StringType(), True),
+    StructField("AwayTeam", StringType(), True),
+    StructField("FTHG", IntegerType(), True),
+    StructField("FTAG", IntegerType(), True),
+    StructField("FTR", StringType(), True),
+    StructField("HTHG", IntegerType(), True),
+    StructField("HTAG", IntegerType(), True),
+    StructField("HTR", StringType(), True),
+    StructField("HS", IntegerType(), True),
+    StructField("AS", IntegerType(), True),
+    StructField("HST", StringType(), True),
+    StructField("AST", StringType(), True),
+    StructField("HF", StringType(), True),
+    StructField("AF", StringType(), True),
+    StructField("HC", StringType(), True),
+    StructField("AC", StringType(), True),
+    StructField("HY", StringType(), True),
+    StructField("AY", StringType(), True),
+    StructField("HR", StringType(), True),
+    StructField("AR", StringType(), True),
+    StructField("B365H", StringType(), True),
+    StructField("B365D", StringType(), True),
+    StructField("B365A", StringType(), True),
+])
+
 # Function to calculate and display the results for each query
 def cau_3():
     # ===================3.3=============
@@ -109,6 +138,29 @@ def cau_10():
     print("Câu 3.10")
     cau10.select("Div", "Date", "HomeTeam", "AwayTeam", "FTHG", "FTAG", "FTR", "GoalsTotal", "Status").show(n=cau10.count(), truncate=False)
 
+def cau_4_stream():
+    # Đọc dữ liệu sử dụng readStream
+    df = spark.readStream \
+        .format("csv") \
+        .option("header", "true").schema(schema) \
+        .load("stream/")
+
+    # dfs = df.select("Date", "Time","HomeTeam", "AwayTeam", "FTHG", "FTAG", "HTHG", "HTAG")
+    dfs = df.select("Date","HomeTeam", "AwayTeam", "FTHG", "FTAG", "HTHG", "HTAG")
+    goal_counts = dfs.filter((col("FTHG") == col("HTHG")) & (col("FTAG") == col("HTAG")))
+
+    result = goal_counts.withColumn("TotalGoals", col("FTHG") + col("FTAG"))
+
+    # Ghi ra số bàn thắng
+    query = result.writeStream \
+        .outputMode("append") \
+        .format("console")\
+        .start()
+
+
+    # Chờ cho đến khi người dùng dừng ứng dụng
+    query.awaitTermination()
+
 def run_full_code():
     cau_3()
     cau_4()
@@ -135,6 +187,7 @@ menu_options = {
     7:cau_9,
     8:cau_10,
     9:run_full_code,
+    10: cau_4_stream,
     0: exit_program
 }
 
@@ -150,6 +203,7 @@ while True:
     print("7. Câu 3.9")
     print("8. Câu 3.10")
     print("9. Chạy từ Câu 3.3 đến Câu 3.10")
+    print("10. Chạy câu 4")
     print("0. Exit")
     try:
         choice = int(input("Enter your choice: "))

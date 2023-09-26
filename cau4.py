@@ -45,6 +45,7 @@ spark = SparkSession.builder \
     .config("spark.driver.userClassPathFirst", "true") \
     .getOrCreate()
 
+
 # Read the CSV file
 data = spark.readStream \
     .schema(schema) \
@@ -54,16 +55,19 @@ data = spark.readStream \
     .load()
 
 
-# Perform your data processing and filtering here
-data_filtered = data.where((col("HTHG") == col("FTHG")) & (col("HTAG") == col("FTAG"))) \
-    .withColumn("Total", col("FTHG") + col("FTAG"))
+# dfs = df.select("Date", "Time","HomeTeam", "AwayTeam", "FTHG", "FTAG", "HTHG", "HTAG")
+dfs = data.select("Date","HomeTeam", "AwayTeam", "FTHG", "FTAG", "HTHG", "HTAG")
+goal_counts = dfs.filter((col("FTHG") == col("HTHG")) & (col("FTAG") == col("HTAG")))
 
-# Define your streaming query
-query = data_filtered.writeStream \
+result = goal_counts.withColumn("TotalGoals", col("FTHG") + col("FTAG"))
+
+# Ghi ra số bàn thắng
+query = result.writeStream \
     .outputMode("append") \
+    .option("truncate", False) \
     .format("console") \
-    .foreachBatch(lambda batch, batchId: batch.show(100)) \
     .start()
 
-# Await the termination of the streaming query
+
+# Chờ cho đến khi người dùng dừng ứng dụng
 query.awaitTermination()
