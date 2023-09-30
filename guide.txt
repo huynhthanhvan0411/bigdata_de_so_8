@@ -1,3 +1,6 @@
 hướng dẫn
 1. câu 3.3. -10 code chính ở file index.py
-2. câu 4 đang làm dở ở cau4.py
+2. code caua 4 chính cũng ở index.py
+3. giải thích các câu 3.3 -3.10 nằm riêng từng file cau33, cau34, mỗi file ghi rõ chú thích cách làm
+4. hãy làm lại 1 lần xem khả năng làm đến câu mấy
+
