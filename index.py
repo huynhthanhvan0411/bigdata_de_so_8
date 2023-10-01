@@ -1,25 +1,11 @@
 import pyspark
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import countDistinct
-from pyspark.sql.functions import count, sum
-from pyspark.sql.functions import col
-from pyspark.sql.functions import when
-from pyspark.sql.functions import col, min, max, avg
-from pyspark.sql.window import Window
-from pyspark.sql import functions as F
-from pyspark.sql.types import IntegerType
-from pyspark.sql.types import StructType, StructField, StringType
-import logging
+from pyspark.sql.types import StructType, StructField, StringType, IntegerType
 
 # Create a Spark session
 spark = SparkSession.builder.appName("FindMaxProduct").getOrCreate()
 
-# Load the CSV data
-data = spark.read.format('csv')\
-            .option('header', 'true')\
-            .option('escape', '\"')\
-            .load('D:/WORK_UTT_F/nam_4/ki_1/part_1/big_data_demo/nhom6/E1.csv')
-
+# Define the schema with specified data types
 schema = StructType([
     StructField("Div", StringType(), True),
     StructField("Date", StringType(), True),
@@ -49,7 +35,16 @@ schema = StructType([
     StructField("B365A", StringType(), True),
 ])
 
+# Load the CSV data with the defined schema
+data = spark.read.format('csv') \
+    .option('header', 'true') \
+    .option('escape', '\"') \
+    .schema(schema) \
+    .load('D:/WORK_UTT_F/nam_4/ki_1/part_1/big_data_demo/nhom6/E1.csv')
 # Function to calculate and display the results for each query
+def cau3_schema():
+ data.printSchema()
+
 def cau_3():
     # ===================3.3=============
     # cau_3 = data.select("HomeTeam").distinct()
@@ -81,8 +76,6 @@ def cau_5():
     # tính toorng full số bàn thắng ở cột total 
     total_goals = cau5.selectExpr("sum(Total) as Total").first().Total
     print("Tổng số bàn thắng các đội đá sân nhà ghi được: " + str(total_goals))
-
-
 def cau_6():
     # 3.6. Tìm những trận có tổng số bàn thắng > 3
     print("Câu 3.6:")
@@ -164,6 +157,7 @@ def cau_4_stream():
     query.awaitTermination()
 
 def run_full_code():
+    cau3_schema()
     cau_3()
     cau_4()
     cau_5()
@@ -190,6 +184,7 @@ menu_options = {
     8:cau_10,
     9:run_full_code,
     10: cau_4_stream,
+    11: cau3_schema,
     0: exit_program
 }
 
@@ -206,6 +201,7 @@ while True:
     print("8. Câu 3.10")
     print("9. Chạy từ Câu 3.3 đến Câu 3.10")
     print("10. Chạy câu 4")
+    print("11. Chạy câu 3.2")
     print("0. Exit")
     try:
         choice = int(input("Enter your choice: "))
