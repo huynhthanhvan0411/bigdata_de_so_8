@@ -146,7 +146,7 @@ def cau_4_stream():
         .load("stream/")
 
     # dfs = df.select("Date", "Time","HomeTeam", "AwayTeam", "FTHG", "FTAG", "HTHG", "HTAG")
-    dfs = df.select("Date","Time", "HomeTeam", "AwayTeam", "FTHG", "FTAG", "HTHG", "HTAG")
+    dfs = df.select("Date", "HomeTeam", "AwayTeam", "FTHG", "FTAG", "HTHG", "HTAG")
     goal_counts = dfs.filter((col("FTHG") == col("HTHG")) & (col("FTAG") == col("HTAG")))
 
     result = goal_counts.withColumn("TotalGoals", col("FTHG") + col("FTAG"))
