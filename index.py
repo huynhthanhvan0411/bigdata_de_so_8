@@ -201,7 +201,7 @@ while True:
     print("8. Câu 3.10")
     print("9. Chạy từ Câu 3.3 đến Câu 3.10")
     print("10. Chạy câu 4")
-    print("11. Chạy câu 3.2")
+    # print("11. Chạy câu 3.2")
     print("0. Exit")
     try:
         choice = int(input("Enter your choice: "))
