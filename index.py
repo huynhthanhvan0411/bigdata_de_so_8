@@ -1,9 +1,10 @@
 import pyspark
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType
+from pyspark.sql.functions import col, min, max, avg, when
 
 # Create a Spark session
-spark = SparkSession.builder.appName("FindMaxProduct").getOrCreate()
+spark = SparkSession.builder.appName("bigdata").getOrCreate()
 
 # Define the schema with specified data types
 schema = StructType([

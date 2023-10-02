@@ -24,7 +24,7 @@ data = data.withColumn("FTHG", data["FTHG"].cast(IntegerType()))
 data = data.withColumn("FTAG", data["FTAG"].cast(IntegerType()))
 data = data.withColumn("HS", data["HS"].cast(IntegerType()))
 data = data.withColumn("AS", data["AS"].cast(IntegerType()))
-
+data.printSchema()
 # 3.4. Tìm số trận có kết quả hoà
 # (FTR= Full time result: H = homewin, D = Draw, A= Awaywin)
 

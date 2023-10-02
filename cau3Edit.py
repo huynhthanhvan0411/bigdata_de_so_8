@@ -1,14 +1,9 @@
 import pyspark
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import countDistinct
-from pyspark.sql.functions import count, sum
-from pyspark.sql.functions import col
-from pyspark.sql.functions import when
-from pyspark.sql.functions import col, min, max, avg
+from pyspark.sql.functions import countDistinct,count,sum,col,when,min,max,avg
 from pyspark.sql.window import Window
 from pyspark.sql import functions as F
-from pyspark.sql.types import IntegerType
-from pyspark.sql.types import StructType, StructField, StringType
+from pyspark.sql.types import IntegerType, StructType, StructField, StringType
 import logging
 
 

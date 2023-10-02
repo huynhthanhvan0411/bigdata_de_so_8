@@ -30,3 +30,4 @@ cau9_data = data.groupBy("HomeTeam", "FTR").agg(count("FTR").alias("Count"))
 cau9 = cau9_data.groupBy("HomeTeam").pivot("FTR").agg(sum("Count")).na.fill(0)
 # print("so cot"+str(cau9.count()))
 cau9.show(n=cau9.count(), truncate=False)
+
